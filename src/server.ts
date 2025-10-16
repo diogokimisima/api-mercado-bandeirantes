@@ -50,7 +50,12 @@ app.register(swagger, {
         },
       },
     },
-    servers: [],
+    servers: [
+      {
+        url: '/api',
+        description: 'API Server',
+      }
+    ],
   },
   transform: jsonSchemaTransform,
 })
@@ -68,21 +73,28 @@ app.register(cors, {
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 })
 
-// Registro das rotas de categoria
-app.register(createCategory)
-app.register(deleteCategory)
-app.register(getCategory)
-app.register(listCategories)
-app.register(updateCategory)
+// Registrando todas as rotas sob o prefixo /api
+app.register(
+  async (apiRouter) => {
+    // Registro das rotas de categoria
+    apiRouter.register(createCategory)
+    apiRouter.register(deleteCategory)
+    apiRouter.register(getCategory)
+    apiRouter.register(listCategories)
+    apiRouter.register(updateCategory)
 
-// Registro das rotas de produto
-app.register(createProduct)
-app.register(deleteProduct)
-app.register(getProduct)
-app.register(listProducts)
-app.register(updateProduct)
+    // Registro das rotas de produto
+    apiRouter.register(createProduct)
+    apiRouter.register(deleteProduct)
+    apiRouter.register(getProduct)
+    apiRouter.register(listProducts)
+    apiRouter.register(updateProduct)
+  }, 
+  { prefix: '/api' }
+)
 
 app.listen({ port: env.SERVER_PORT, host: '0.0.0.0' }).then(() => {
   console.log(`HTTP Server running at http://localhost:${env.SERVER_PORT}`)
+  console.log(`API routes available at http://localhost:${env.SERVER_PORT}/api`)
   console.log(`Documentation available at http://localhost:${env.SERVER_PORT}/docs`)
 })
