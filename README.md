@@ -135,7 +135,6 @@ A API oferece os seguintes endpoints:
 ## Scripts disponíveis
 
 - `npm run dev` - Inicia o servidor em modo de desenvolvimento
-- `npm run build` - Compila o TypeScript para JavaScript
 - `npm start` - Executa a versão compilada
 - `npm run prisma:generate` - Gera o cliente Prisma
 - `npm run prisma:migrate` - Executa as migrações do banco de dados
@@ -148,7 +147,6 @@ A API oferece os seguintes endpoints:
 | NODE_ENV | Ambiente de execução | development |
 | SERVER_PORT | Porta do servidor | 3333 |
 | DATABASE_URL | URL de conexão com o banco de dados | postgresql://postgres:postgres@localhost:5432/fastify_prisma_db |
-| JWT_SECRET | Chave secreta para JWT | (precisa ser definida) |
 
 ## Problemas comuns
 
