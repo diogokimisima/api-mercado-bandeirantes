@@ -13,6 +13,20 @@ import {
 import { env } from './env'
 import { errorHandler } from './http/error-handler'
 
+// Importação das rotas de categoria
+import { createCategory } from './http/routes/categories/create-category'
+import { deleteCategory } from './http/routes/categories/delete-category'
+import { getCategory } from './http/routes/categories/get-category'
+import { listCategories } from './http/routes/categories/list-categories'
+import { updateCategory } from './http/routes/categories/update-category'
+
+// Importação das rotas de produto
+import { createProduct } from './http/routes/products/create-product'
+import { deleteProduct } from './http/routes/products/delete-product'
+import { getProduct } from './http/routes/products/get-product'
+import { listProducts } from './http/routes/products/list-products'
+import { updateProduct } from './http/routes/products/update-product'
+
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
 app.setValidatorCompiler(validatorCompiler)
@@ -54,8 +68,19 @@ app.register(cors, {
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 })
 
-// Registro de rotas
-// app.register(createUser)
+// Registro das rotas de categoria
+app.register(createCategory)
+app.register(deleteCategory)
+app.register(getCategory)
+app.register(listCategories)
+app.register(updateCategory)
+
+// Registro das rotas de produto
+app.register(createProduct)
+app.register(deleteProduct)
+app.register(getProduct)
+app.register(listProducts)
+app.register(updateProduct)
 
 app.listen({ port: env.SERVER_PORT, host: '0.0.0.0' }).then(() => {
   console.log(`HTTP Server running at http://localhost:${env.SERVER_PORT}`)
