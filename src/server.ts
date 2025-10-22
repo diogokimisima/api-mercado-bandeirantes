@@ -26,6 +26,7 @@ import { deleteProduct } from './http/routes/products/delete-product'
 import { getProduct } from './http/routes/products/get-product'
 import { listProducts } from './http/routes/products/list-products'
 import { updateProduct } from './http/routes/products/update-product'
+import { apiKeyAuth } from './http/middleware/api-key-auth'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
@@ -43,18 +44,16 @@ app.register(swagger, {
     },
     components: {
       securitySchemes: {
-        bearerAuth: {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT',
+        apiKey: {
+          type: 'apiKey',
+          name: 'X-API-Key',
+          in: 'header',
         },
       },
     },
+    security: [{ apiKey: [] }],
     servers: [
-      {
-        url: '/api',
-        description: 'API Server',
-      }
+      { url: 'http://localhost:3333/api', description: 'API Server' }
     ],
   },
   transform: jsonSchemaTransform,
@@ -62,10 +61,6 @@ app.register(swagger, {
 
 app.register(swaggerUi, {
   routePrefix: '/docs',
-})
-
-app.register(jwt, {
-  secret: env.JWT_SECRET,
 })
 
 app.register(cors, {
@@ -76,6 +71,9 @@ app.register(cors, {
 // Registrando todas as rotas sob o prefixo /api
 app.register(
   async (apiRouter) => {
+    // Bloqueia todas as rotas do /api exigindo o token
+    apiRouter.addHook('onRequest', apiKeyAuth)
+    
     // Registro das rotas de categoria
     apiRouter.register(createCategory)
     apiRouter.register(deleteCategory)
